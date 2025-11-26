@@ -1,0 +1,837 @@
+```html
+!DOCTYPE html
+html lang=zh-CN
+head
+meta charset=utf-8 
+meta name=viewport content=width=device-width,initial-scale=1 
+title艾宾浩斯学习计划（GitHub Pages 版）title
+
+!-- Fonts (web safe fallback if blocked) --
+link href=httpsfonts.googleapis.comcss2family=Interwght@300;600;800;900&display=swap rel=stylesheet
+
+style
+root{
+  --bg#fff7fb;
+  --card#ffffff;
+  --accent#c28dff;
+  --accent-2#ff8ecf;
+  --muted#7a6b7a;
+  --text#2b2b2b;
+  --heart#ff76b4;
+  --max-width1680px;
+  --col-width220px;
+
+   palette (macaron tones) 
+  --col-1#e8dbff; --col-2#e6f3ff; --col-3#ffdce6; --col-4#fff1d6;
+  --col-5#eafff1; --col-6#fde8ff; --col-7#ffeef8; --col-8#eef7ff;
+  --col-fallback#f3e8ff;
+}
+
+ base 
+{box-sizingborder-box}
+body{
+  margin0;padding22px;backgroundlinear-gradient(180deg,#fff8fd,#fff6fb);
+  font-familyInter, Segoe UI, Roboto, Noto Sans SC, Arial;
+  colorvar(--text);
+}
+.container{max-widthvar(--max-width);margin0 auto;width96%;}
+
+ header 
+.header{displayflex;justify-contentspace-between;align-itemscenter;gap12px;margin-bottom14px}
+.title{font-size26px;font-weight900;colorvar(--accent)}
+.subtitle{color#6f5f6f;margin-top4px;font-size13px}
+.controls{displayflex;gap8px;align-itemscenter;flex-wrapwrap}
+.btn{backgroundlinear-gradient(180deg,#fff0ff,#ffdfee);bordernone;padding8px 12px;border-radius10px;cursorpointer;font-weight900}
+.btn.small{padding6px 10px;font-size13px}
+.btn.ghost{backgroundwhite;border1px solid #ece7f3}
+
+ layout 
+.layout{displaygrid;grid-template-columns1fr 360px;gap18px}
+@media (min-width1800px){ .layout{grid-template-columns1fr 400px} }
+@media (max-width1200px){ .layout{grid-template-columns1fr 320px}; root{--col-width200px} }
+
+ calendar 
+.calendarWrap{backgroundvar(--card);border-radius16px;padding16px;box-shadow0 10px 22px rgba(160,120,220,0.06);}
+.calendarGrid{displaygrid;grid-template-columnsrepeat(7,var(--col-width));gap10px;margin-top10px;justify-contentstart;align-itemsstart}
+.monthCard{grid-columnspan 7;backgroundlinear-gradient(180deg,#fffaff,#fff0fb);border-radius12px;padding10px;font-weight900;colorvar(--accent);displayflex;align-itemscenter;justify-contentcenter;box-shadow0 6px 18px rgba(0,0,0,0.04)}
+.dayCell{backgroundlinear-gradient(180deg,#ffffff,#fff6ff);padding12px;border-radius12px;min-height130px;displayflex;flex-directioncolumn;border1px solid rgba(190,150,255,0.12);positionrelative;transitiontransform .12s}
+.dayCellhover{transformtranslateY(-4px);box-shadow0 8px 20px rgba(0,0,0,0.06)}
+
+ date 
+.dateBadge{font-weight900;colorvar(--accent);font-size15px;margin-bottom6px;displayflex;align-itemscenter;gap8px;flex-wrapwrap}
+.dateBadge .sep{color#e6d9e8;margin0 6px}
+.dateBadge .wk{font-weight900;colorvar(--heart);padding2px 6px;border-radius6px;backgroundlinear-gradient(180deg,#fff6fb,#fff0f7);font-size14px}
+
+ items 
+.items{displayflex;flex-directioncolumn;gap8px;margin-topauto;overflowauto;padding-right4px}
+.item{displayflex;align-itemscenter;justify-contentspace-between;padding8px;border-radius10px;font-weight800;font-size13px;white-spacenowrap;overflowhidden;text-overflowellipsis;border1px solid rgba(230,210,245,0.45)}
+.item.review{backgroundlinear-gradient(180deg,#f0fbff,#eaf8ff);border1px solid rgba(200,230,255,0.55)}
+
+ tag 
+.tag{displayinline-flex;align-itemscenter;gap8px}
+.colorDot{width12px;height12px;border-radius999px;border2px solid rgba(255,255,255,0.5);box-shadow0 2px 6px rgba(0,0,0,0.04)}
+.labelText{min-width80px;font-weight900;font-size13px}
+
+ rest 
+.restOverlay{border2px dashed #ffd591}
+.restTag{background#fff3dc;padding4px 6px;border-radius8px;font-weight900;color#7a5200;margin-bottom6px;text-aligncenter}
+
+ side 
+.side{positionsticky;top20px}
+.statBox{backgroundvar(--card);padding14px;border-radius12px;box-shadow0 6px 18px rgba(0,0,0,0.06);margin-bottom16px}
+.statTitle{font-weight900;colorvar(--accent);margin-bottom8px}
+.statRow{displayflex;justify-contentspace-between;font-weight800;margin6px 0}
+.progress{height14px;background#f0eef5;border-radius999px;overflowhidden}
+.progressInner{height14px;backgroundlinear-gradient(90deg,var(--accent),var(--accent-2));width0%;transitionwidth .3s}
+
+ week 
+.weekView{displaynone;margin-top16px;backgroundvar(--card);padding12px;border-radius12px;box-shadow0 6px 16px rgba(0,0,0,0.06)}
+.weekRow{displayflex;flex-wrapnowrap;gap12px;overflow-xauto;padding-bottom6px}
+.weekCell{backgroundlinear-gradient(180deg,#fff,#fff6ff);padding10px;border-radius12px;min-widthvar(--col-width);border1px solid rgba(200,160,255,0.12);displayflex;flex-directioncolumn;gap8px}
+.weekDate{displayflex;align-itemscenter;gap10px;font-weight900;colorvar(--accent);font-size13px}
+
+ hint 
+.hintBox{margin-top10px;text-aligncenter;color#f0b5da;font-weight900;border-radius10px;padding8px;backgroundlinear-gradient(180deg,#fff8ff,#fff0fb)}
+style
+head
+body
+div class=container
+  div class=header
+    div
+      div class=title艾宾浩斯学习计划div
+      div class=subtitle最稳定的在线基础版 — GitHub Pages 可直接使用（保留 localStorage & 备份）div
+    div
+
+    div class=controls
+      button id=toggleView class=btn small ghost切换 周视图  月视图button
+      button id=markAllTodayBtn class=btn small一键打卡今日全部课程button
+      button id=exportWeekPng class=btn small导出 PNG 周学习报告button
+      button id=exportBtn class=btn small导出 JSONbutton
+      button id=importBtn class=btn small ghost导入 JSONbutton
+    div
+  div
+
+  div class=layout
+    main
+      div class=calendarWrap
+        div style=font-weight900;font-size15px;margin-bottom8px;日历（从 2025-11 开始）div
+        div id=calendarGrid class=calendarGrid role=application aria-label=学习日历div
+
+        div style=margin-top12px;displayflex;gap8px;
+          input id=restInput placeholder=添加休息日 YYYY-MM-DD（逗号分隔） style=flex1;padding10px;border-radius10px;border1px solid #efe0f6;
+          button id=addRestBtn class=btn small ghost添加button
+          button id=clearRestBtn class=btn small ghost清除button
+        div
+
+        div id=weekView class=weekView
+          div style=displayflex;justify-contentspace-between;align-itemscenter;margin-bottom8px;
+            div style=font-weight900本周学习（周视图）div
+            div style=font-size12px;color#8a7c8a一行展示 · 横向滚动div
+          div
+          div id=weekRow class=weekRowdiv
+        div
+
+      div
+
+      div class=calendarWrap style=margin-top18px;
+        div style=font-weight900;margin-bottom8px;新增课程  批量导入div
+
+        div style=displayflex;gap10px;flex-wrapwrap;margin-bottom10px;align-itemscenter;
+          label今天是第label
+          input id=todayInput type=number value=1 style=width90px;padding8px;border-radius8px;border1px solid #efe0f6
+          label新增节数label
+          input id=newCount type=number value=1 style=width90px;padding8px;border-radius8px;border1px solid #efe0f6
+          button id=addBtn class=btn small加入学习button
+          button id=auto72 class=btn small ghost快捷导入72课button
+        div
+
+        textarea id=importArea style=width100%;min-height110px;border-radius10px;border1px solid #efe0f6;padding12px;font-familymonospace;
+          placeholder='支持格式：
+{Lesson 1- Lesson 21}
+{11, 22}
+[{groupLesson 1- Lesson 2,start1}]'textarea
+
+        div style=displayflex;gap10px;margin-top10px;
+          button id=doImport class=btn small导入 JSONbutton
+          button id=doExport class=btn small ghost导出当前数据button
+          button id=resetBtn class=btn small ghost重置全部button
+        div
+      div
+
+    main
+
+    aside class=side
+      div class=statBox
+        div class=statTitle统计div
+        div class=statRowdiv已学节数divdiv id=statTotal0divdiv
+        div class=statRowdiv已完成次数divdiv id=statDone0divdiv
+        div class=statRowdiv总体完成率divdiv id=statRate0%divdiv
+        div class=statRowdiv连续打卡divdiv id=statStreak0divdiv
+        div style=margin-top8px class=progressdiv id=progressInner class=progressInner style=width0%divdiv
+      div
+
+      div class=statBox
+        div style=font-weight900;margin-bottom8px;快捷div
+        button id=exportFile class=btn small style=width100%;下载 JSONbutton
+      div
+
+      div style=height10pxdiv
+      div class=hintBox小提示：右键日格可设置取消休息日；本页面数据保存在你的浏览器（localStorage），不会自动上传。div
+    aside
+  div
+div
+
+!-- html2canvas for PNG export --
+script src=httpscdnjs.cloudflare.comajaxlibshtml2canvas1.4.1html2canvas.min.jsscript
+
+script
+ ==========================
+   Stable Online Version (A)
+   - Keep original data structure and localStorage key
+   - Works on GitHub Pages as-is (no server required)
+   - Auto daily snapshot, right-click rest day, importexport retained
+   ========================== 
+
+ constants (unchanged key) 
+const START_DATE = new Date(2025-11-06);
+const OFFSETS = [0,1,3,7,14,29];
+const STORAGE_KEY = NCE_V7_COLORED_RULES;  keep unchanged
+const DAILY_PREFIX = STORAGE_KEY + _daily_;
+const DAILY_INDEX_KEY = STORAGE_KEY + _daily_index;
+const LAST_BACKUP_KEY = STORAGE_KEY + _lastbackup;
+const MAX_DAILY_SNAPSHOTS = 30;
+
+ palette from CSS variables 
+const PALETTE = [
+  getComputedStyle(document.documentElement).getPropertyValue('--col-1').trim()  '#e8dbff',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-2').trim()  '#e6f3ff',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-3').trim()  '#ffdce6',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-4').trim()  '#fff1d6',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-5').trim()  '#eafff1',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-6').trim()  '#fde8ff',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-7').trim()  '#ffeef8',
+  getComputedStyle(document.documentElement).getPropertyValue('--col-8').trim()  '#eef7ff'
+];
+
+const WEEK_ENG = [Sun,Mon,Tue,Wed,Thu,Fri,Sat];
+const $ = id = document.getElementById(id);
+
+ data 
+let data = { groups{}, restDays[], meta{ lastActivenull, streak0 } };
+
+ helpers 
+function fmt(d){ const dt = d instanceof Date  d  new Date(d); return dt.toISOString().slice(0,10); }
+function dateToDay(date){ const d = date instanceof Date  date  new Date(date); return Math.floor((d - START_DATE)(1000360024))+1; }
+function dayToDate(day){ const d = new Date(START_DATE); d.setDate(d.getDate() + (day-1)); return d; }
+function shortName(name){ const m = name.match((d+)[^d]+(d+)); if(m){ const a = String(m[1]).padStart(2,'0'), b = String(m[2]).padStart(2,'0'); return `L${a}-L${b}`; } return name.replace(Lessonig,'L').replace(s+g,''); }
+function groupStartNumber(groupName){ const m = groupName.match((d+)[^d]+(d+)); if(!m) return 0; return Number(m[1]); }
+function hexToRgb(hex){ hex = hex.replace('#',''); if(hex.length===3) hex = hex.split('').map(h=h+h).join(''); const r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), b = parseInt(hex.slice(4,6),16); return {r,g,b}; }
+function rgbToHex(r,g,b){ return '#' + [r,g,b].map(v=v.toString(16).padStart(2,'0')).join(''); }
+function shade(hex, amt){ const c = hexToRgb(hex); const r = Math.round(Math.min(255,Math.max(0,c.r + (amt255)))); const g = Math.round(Math.min(255,Math.max(0,c.g + (amt255)))); const b = Math.round(Math.min(255,Math.max(0,c.b + (amt255)))); return rgbToHex(r,g,b); }
+function darken(hex, amt){ const c = hexToRgb(hex); const r = Math.round(c.r(1-amt)); const g = Math.round(c.g(1-amt)); const b = Math.round(c.b(1-amt)); return rgbToHex(r,g,b); }
+function escapeAttrUTF(s){ return String(s).replace(g,'&quot;').replace('g,&#39;); }
+function unescapeAttrUTF(s){ return String(s).replace(&quot;g,'').replace(&#39;g,'); }
+
+ color mapping (same logic as before) 
+function initialColorMap(){
+  const map = {};
+  for(const gName of Object.keys(data.groups)){
+    const s = Number(data.groups[gName].startDay);
+    if(!(s in map)){
+      const startNum = groupStartNumber(gName);
+      const pairIndex = Math.max(0, Math.ceil(startNum2) - 1);
+      map[s] = pairIndex % PALETTE.length;
+    }
+  }
+  return map;
+}
+function buildSchedule(){
+  const sched = {};
+  for(const [g,info] of Object.entries(data.groups)){
+    const s = Number(info.startDay);
+    if(!sched[s]) sched[s] = { learn [], review [] };
+    sched[s].learn.push(g);
+    OFFSETS.forEach(of={
+      const occ = s + of;
+      if(!sched[occ]) sched[occ] = { learn [], review [] };
+      sched[occ].review.push({ group g, occDay occ });
+    });
+  }
+  return sched;
+}
+function buildDayColors(colorMap){
+  const sched = buildSchedule();
+  const dayColors = {};
+  const allDays = Object.keys(sched).map(Number).sort((a,b)=a-b);
+  allDays.forEach(day={
+    dayColors[day] = new Set();
+    (sched[day].learn[]).forEach(g={
+      const s = Number(data.groups[g].startDay);
+      if(colorMap[s]!==undefined) dayColors[day].add(colorMap[s]);
+      else {
+        const pairIndex = Math.max(0, Math.ceil(groupStartNumber(g)2)-1);
+        dayColors[day].add(pairIndex % PALETTE.length);
+      }
+    });
+    (sched[day].review[]).forEach(r={
+      const s = Number(data.groups[r.group].startDay);
+      if(colorMap[s]!==undefined) dayColors[day].add(colorMap[s]);
+      else {
+        const pairIndex = Math.max(0, Math.ceil(groupStartNumber(r.group)2)-1);
+        dayColors[day].add(pairIndex % PALETTE.length);
+      }
+    });
+  });
+  return dayColors;
+}
+function findBadRuns(dayColors){
+  const days = Object.keys(dayColors).map(Number).sort((a,b)=a-b);
+  const bad = [];
+  const paletteCount = PALETTE.length;
+  for(let p=0;ppaletteCount;p++){
+    let runDays = [];
+    days.forEach(d={
+      if(dayColors[d].has(p)){
+        runDays.push(d);
+      } else {
+        if(runDays.length=3) bad.push({colorp, days[...runDays]});
+        runDays = [];
+      }
+    });
+    if(runDays.length=3) bad.push({colorp, days[...runDays]});
+  }
+  return bad;
+}
+function normalizeColorMap(){
+  let colorMap = initialColorMap();
+  let iter = 0;
+  while(iter  30){
+    const dayColors = buildDayColors(colorMap);
+    const bad = findBadRuns(dayColors);
+    if(bad.length === 0) return colorMap;
+    const run = bad[0];
+    const middleDay = run.days[Math.floor(run.days.length2)];
+    let candidateStart = null;
+    for(const g of Object.keys(data.groups)){
+      if(Number(data.groups[g].startDay) === middleDay){ candidateStart = middleDay; break; }
+    }
+    if(candidateStart === null){
+      const sched = buildSchedule();
+      const daySched = sched[middleDay]  { learn[], review[] };
+      if(daySched.learn && daySched.learn.length) candidateStart = Number(data.groups[daySched.learn[0]].startDay);
+      else if(daySched.review && daySched.review.length) candidateStart = Number(data.groups[daySched.review[0].group].startDay);
+    }
+    if(candidateStart === null){
+      for(const [s,idx] of Object.entries(colorMap)){
+        if(Number(idx) === run.color){ candidateStart = Number(s); break; }
+      }
+    }
+    if(candidateStart === null) break;
+    colorMap[candidateStart] = (colorMap[candidateStart] + 1) % PALETTE.length;
+    iter++;
+  }
+  return colorMap;
+}
+let computedColorMap = {};
+function ensureColorMap(){ computedColorMap = normalizeColorMap(); }
+function groupColor(groupName){
+  const start = Number(data.groups[groupName].startDay);
+  const idx = computedColorMap[start] !== undefined  computedColorMap[start]  (Math.max(0, Math.ceil(groupStartNumber(groupName)2)-1) % PALETTE.length);
+  return PALETTE[idx % PALETTE.length]  getComputedStyle(document.documentElement).getPropertyValue('--col-fallback').trim();
+}
+function createTagHTML(groupName){
+  const color = groupColor(groupName);
+  const label = shortName(groupName);
+  const dotBorder = shade(color, -0.06);
+  const labelColor = darken(color, 0.28);
+  return `span class=tagspan class=colorDot style=background${color};border-color${dotBorder}spanspan class=labelText style=color${labelColor}${label}spanspan`;
+}
+
+ column width compute (169 friendly, slightly wider) 
+function computeColumnWidth(){
+  const targetMax = 1680;
+  const windowAvail = Math.min(window.innerWidth - 120, targetMax);
+  const sideWidthApprox = 360;
+  const usable = Math.max(800, windowAvail - sideWidthApprox);
+  const gapTotal = 6  10;
+  let col = Math.floor((usable - gapTotal)  7);
+  if(col  140) col = 140;
+  if(col  300) col = 300;
+  document.documentElement.style.setProperty('--col-width', col + 'px');
+}
+
+ pretty date 
+function prettyDateHTML(dt){
+  const mm = String(dt.getMonth()+1).padStart(2,'0');
+  const dd = String(dt.getDate()).padStart(2,'0');
+  const w = WEEK_ENG[dt.getDay()];
+  const dn = dateToDay(dt);
+  return `${mm}${dd}span class=sepspanspan class=wk${w}spanspan class=sepspan Day ${dn}`;
+}
+
+ render calendar 
+function renderCalendarRange(){
+  computeColumnWidth();
+  ensureColorMap();
+
+  const grid = $(calendarGrid);
+  grid.innerHTML = ;
+  const sched = buildSchedule();
+
+  const base = START_DATE.getFullYear()12 + START_DATE.getMonth();
+  const months = [];
+  for(let i=0;i3;i++){
+    const idx = base + i;
+    months.push({yearMath.floor(idx12), month idx%12});
+  }
+
+  months.forEach(({year,month})={
+    const monthCard = document.createElement(div);
+    monthCard.className = monthCard;
+    monthCard.innerHTML = `${year} - ${String(month+1).padStart(2,'0')} span style=margin-left8px;colorvar(--heart)❤span`;
+    grid.appendChild(monthCard);
+
+    const first = new Date(year,month,1);
+    const last = new Date(year,month+1,0);
+    const w0 = first.getDay();
+
+    for(let i=0;iw0;i++){
+      const ph = document.createElement(div);
+      ph.style.background = transparent; ph.style.boxShadow=none; ph.style.border=none; ph.style.minHeight=0;
+      grid.appendChild(ph);
+    }
+
+    for(let d=1; d= last.getDate(); d++){
+      const dt = new Date(year,month,d);
+      const dayNum = dateToDay(dt);
+      const dateStr = fmt(dt);
+
+      const cell = document.createElement(div);
+      cell.className = dayCell;
+      cell.dataset.day = dayNum;
+      cell.dataset.date = dateStr;
+      cell.title = 右键设置取消休息日;
+
+      if(data.restDays.includes(dateStr)){
+        cell.classList.add(restOverlay);
+        const tag = document.createElement(div);
+        tag.className = restTag; tag.innerText = 休息日;
+        cell.appendChild(tag);
+      }
+
+      const dateBadge = document.createElement(div);
+      dateBadge.className = dateBadge;
+      dateBadge.innerHTML = prettyDateHTML(dt);
+      cell.appendChild(dateBadge);
+
+      const items = document.createElement(div);
+      items.className = items;
+
+      const daySched = sched[dayNum]  { learn[], review[] };
+
+      daySched.learn.forEach(g={
+        const item = document.createElement(div);
+        item.className = item;
+        const tagHTML = createTagHTML(g);
+        const checked = isDone(g,dayNum)  checked  ;
+        item.innerHTML = `${tagHTML}div style=margin-left12px;flex1divdivinput type=checkbox class=chk data-group=${escapeAttrUTF(g)} data-day=${dayNum} ${checked}div`;
+        const c = groupColor(g);
+        item.style.background = `linear-gradient(180deg, ${shade(c,0.06)}, ${shade(c,-0.02)})`;
+        items.appendChild(item);
+      });
+
+      daySched.review.forEach(r={
+        const item = document.createElement(div);
+        item.className = item review;
+        const tagHTML = createTagHTML(r.group);
+        const checked = isDone(r.group,r.occDay)  checked  ;
+        item.innerHTML = `span style=color#ffb7e6; font-weight900;❤span ${tagHTML}div style=margin-left12px;flex1divdivinput type=checkbox class=chk data-group=${escapeAttrUTF(r.group)} data-day=${r.occDay} ${checked}div`;
+        const c = groupColor(r.group);
+        item.style.background = `linear-gradient(180deg, ${shade(c,0.10)}, ${shade(c,0.02)})`;
+        items.appendChild(item);
+      });
+
+      if(items.children.length === 0){
+        const ph = document.createElement(div); ph.style.color=#bbb; ph.innerText = —;
+        items.appendChild(ph);
+      }
+
+      cell.appendChild(items);
+      grid.appendChild(cell);
+    }
+  });
+
+   right-click toggle for rest day
+  grid.addEventListener('contextmenu', onCalendarContextMenu);
+}
+
+ render week view 
+function renderWeekView(){
+  computeColumnWidth();
+  ensureColorMap();
+
+  const wrap = $(weekRow);
+  wrap.innerHTML = ;
+  const sched = buildSchedule();
+
+  const now = new Date();
+  const cur = now.getDay() === 0  7  now.getDay();
+  const monday = new Date(now); monday.setDate(now.getDate() - cur + 1);
+
+  for(let i=0;i7;i++){
+    const dt = new Date(monday); dt.setDate(monday.getDate() + i);
+    const dayNum = dateToDay(dt);
+    const dateStr = fmt(dt);
+
+    const cell = document.createElement(div);
+    cell.className = weekCell;
+    cell.dataset.day = dayNum;
+    cell.dataset.date = dateStr;
+    cell.title = 右键设置取消休息日;
+
+    const hd = document.createElement(div);
+    hd.className = weekDate;
+    hd.innerHTML = prettyDateHTML(dt);
+    cell.appendChild(hd);
+
+    const items = document.createElement(div);
+
+    const daySched = sched[dayNum]  { learn[], review[] };
+
+    daySched.learn.forEach(g={
+      const item = document.createElement(div);
+      item.className = item;
+      const tagHTML = createTagHTML(g);
+      const checked = isDone(g,dayNum)  checked  ;
+      item.innerHTML = `${tagHTML}div style=margin-left12px;flex1divdivinput type=checkbox class=chk data-group=${escapeAttrUTF(g)} data-day=${dayNum} ${checked}div`;
+      const c = groupColor(g);
+      item.style.background = `linear-gradient(180deg, ${shade(c,0.06)}, ${shade(c,-0.02)})`;
+      items.appendChild(item);
+    });
+
+    daySched.review.forEach(r={
+      const item = document.createElement(div);
+      item.className = item review;
+      const tagHTML = createTagHTML(r.group);
+      const checked = isDone(r.group,r.occDay)  checked  ;
+      item.innerHTML = `span style=color#ffb7e6; font-weight900;❤span ${tagHTML}div style=margin-left12px;flex1divdivinput type=checkbox class=chk data-group=${escapeAttrUTF(r.group)} data-day=${r.occDay} ${checked}div`;
+      const c = groupColor(r.group);
+      item.style.background = `linear-gradient(180deg, ${shade(c,0.10)}, ${shade(c,0.02)})`;
+      items.appendChild(item);
+    });
+
+    if(items.children.length === 0){
+      const ph = document.createElement(div); ph.style.color=#aaa; ph.innerText = —; items.appendChild(ph);
+    }
+
+    cell.appendChild(items);
+    wrap.appendChild(cell);
+  }
+
+   contextmenu for week row
+  $(weekRow).addEventListener('contextmenu', onCalendarContextMenu);
+}
+
+ right-click toggle rest day 
+function onCalendarContextMenu(e){
+  e.preventDefault();
+  let el = e.target;
+  while(el && !el.dataset.date && el !== document.body) el = el.parentElement;
+  if(!el  !el.dataset.date) return;
+  const dateStr = el.dataset.date;
+  if(data.restDays.includes(dateStr)) data.restDays = data.restDays.filter(x=x!==dateStr);
+  else data.restDays.push(dateStr);
+  save();
+}
+
+ checkbox delegation 
+document.addEventListener(change, function(e){
+  const t = e.target;
+  if(t && t.classList && t.classList.contains(chk)){
+    const g = unescapeAttrUTF(t.dataset.group);
+    const d = Number(t.dataset.day);
+    if(t.checked) markDone(g,d); else unmarkDone(g,d);
+    renderStats();
+  }
+});
+
+ doneundone 
+function isDone(group,day){ return data.groups[group].doneDates.includes(day); }
+function markDone(group,day){
+  if(!data.groups[group]) return;
+  data.groups[group].doneDates = data.groups[group].doneDates  [];
+  if(!data.groups[group].doneDates.includes(day)) data.groups[group].doneDates.push(day);
+  updateStreak();
+  save();
+}
+function unmarkDone(group,day){
+  if(!data.groups[group]) return;
+  data.groups[group].doneDates = data.groups[group].doneDates  [];
+  data.groups[group].doneDates = data.groups[group].doneDates.filter(x=x!==day);
+  save();
+}
+function updateStreak(){
+  const today = dateToDay(new Date());
+  const meta = data.meta;
+  if(meta.lastActive === null){ meta.lastActive = today; meta.streak = 1; }
+  else {
+    if(today === meta.lastActive + 1) meta.streak++;
+    else if(today !== meta.lastActive) meta.streak = 1;
+    meta.lastActive = today;
+  }
+}
+
+ mark all today 
+function markAllToday(){
+  const today = dateToDay(new Date());
+  const sched = buildSchedule();
+  const daySched = sched[today]  { learn[], review[] };
+  const groupsToMark = new Set();
+  daySched.learn.forEach(g = groupsToMark.add(g));
+  daySched.review.forEach(r = groupsToMark.add(r.group));
+  groupsToMark.forEach(g = markDone(g, today));
+  renderCalendarRange(); renderWeekView(); renderStats();
+  alert(已为今日所有课程打卡（仅影响今日）);
+}
+
+ export week png 
+async function exportWeekPNG(){
+  const block = $(weekView);
+  if(getComputedStyle(block).display === none){ alert(请先切换到周视图再导出 PNG); return; }
+  try{
+    const canvas = await html2canvas(block,{scale2,useCORStrue});
+    const dataURL = canvas.toDataURL(imagepng);
+    const a = document.createElement('a'); a.href = dataURL; a.download = `学习周报_${new Date().toISOString().slice(0,10)}.png`; a.click();
+  }catch(e){ alert(导出失败：+e.message); }
+}
+
+ mark month  past months helpers (kept but not shown as main UI) 
+function markMonth(year, month){
+  const sched = buildSchedule();
+  const allDays = Object.keys(sched).map(Number);
+  let count=0;
+  allDays.forEach(day = {
+    const dt = dayToDate(day);
+    if(dt.getFullYear() === year && dt.getMonth() === month){
+      const daySched = sched[day];
+      (daySched.learn  []).forEach(g={
+        if(!isDone(g, day)){ markDone(g, day); count++; }
+      });
+      (daySched.review  []).forEach(r={
+        if(!isDone(r.group, r.occDay)){ markDone(r.group, r.occDay); count++; }
+      });
+    }
+  });
+  renderCalendarRange(); renderWeekView(); renderStats();
+  return count;
+}
+function markPastMonths(n){
+  if(n = 0) return 0;
+  const now = new Date();
+  let total = 0;
+  for(let i=0;in;i++){
+    const dt = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    total += markMonth(dt.getFullYear(), dt.getMonth());
+  }
+  return total;
+}
+
+ persistence enhanced daily snapshot (Scheme B) 
+function save(){
+  try{
+    const existing = localStorage.getItem(STORAGE_KEY);
+    if(existing){
+      const backup = { t Date.now(), v JSON.parse(existing) };
+      try{ localStorage.setItem(LAST_BACKUP_KEY, JSON.stringify(backup)); } catch(e){}
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch(e){ console.error(保存失败, e); }
+
+  try{
+    const todayKey = DAILY_PREFIX + (new Date()).toISOString().slice(0,10).replace(-g,'');
+    localStorage.setItem(todayKey, JSON.stringify(data));
+    let idx = [];
+    try{ idx = JSON.parse(localStorage.getItem(DAILY_INDEX_KEY)  []); } catch(e){ idx = []; }
+    const todayId = todayKey;
+    if(!idx.includes(todayId)) idx.push(todayId);
+    if(idx.length  MAX_DAILY_SNAPSHOTS) idx = idx.slice(idx.length - MAX_DAILY_SNAPSHOTS);
+    localStorage.setItem(DAILY_INDEX_KEY, JSON.stringify(idx));
+  } catch(e){ console.warn(daily snapshot failed, e); }
+
+  computeColumnWidth();
+  renderCalendarRange();
+  renderWeekView();
+  renderStats();
+}
+
+ load with today's snapshot merge (avoid rollback) 
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) data = JSON.parse(raw);
+  } catch(e){ data = { groups{}, restDays[], meta{ lastActivenull, streak0 } }; }
+
+  try{
+    const todayKey = DAILY_PREFIX + (new Date()).toISOString().slice(0,10).replace(-g,'');
+    const rawToday = localStorage.getItem(todayKey);
+    if(rawToday){
+      const todayData = JSON.parse(rawToday);
+      for(const [g,info] of Object.entries(todayData.groups  {})){
+        if(!data.groups[g]) data.groups[g] = info;
+        else {
+          data.groups[g].startDay = Number(data.groups[g].startDay  info.startDay);
+          data.groups[g].doneDates = Array.from(new Set([...(data.groups[g].doneDates[]), ...(info.doneDates[])]));
+        }
+      }
+      data.restDays = Array.from(new Set([...(data.restDays  []), ...(todayData.restDays  [])]));
+      if(todayData.meta && todayData.meta.lastActive) data.meta.lastActive = todayData.meta.lastActive;
+      if(todayData.meta && typeof todayData.meta.streak === 'number') data.meta.streak = todayData.meta.streak;
+    }
+  } catch(e){ console.warn(merge today's snapshot failed, e); }
+
+  computeColumnWidth();
+  renderCalendarRange();
+  renderWeekView();
+  renderStats();
+}
+
+ importexport and other UI helpers 
+function addRest(){
+  const raw = $(restInput).value.trim();
+  if(!raw) return;
+  raw.split(,).map(x=x.trim()).forEach(t={
+    const dt = new Date(t);
+    if(!isNaN(dt.getTime())){
+      const s = fmt(dt);
+      if(!data.restDays.includes(s)) data.restDays.push(s);
+    }
+  });
+  save();
+}
+function clearRest(){ data.restDays = []; save(); }
+
+function addLearning(){
+  let today = Number($(todayInput).value)  1;
+  const count = Number($(newCount).value)  1;
+  for(let i=0;icount;i++){
+    const exist = Object.keys(data.groups).length;
+    const startLesson = exist2 + 1;
+    const name = `Lesson ${startLesson}- Lesson ${startLesson+1}`;
+    data.groups[name] = { startDay today, doneDates [] };
+    today++;
+  }
+  save();
+}
+
+function importJSON(){
+  const txt = $(importArea).value.trim();
+  if(!txt) return alert(请粘贴 JSON);
+  try{
+    const parsed = JSON.parse(txt);
+    if(Array.isArray(parsed)){
+      parsed.forEach(o={ if(o.group && o.start) data.groups[o.group] = { startDayNumber(o.start), doneDates o.doneDates  [] }; });
+    } else {
+      for(const k in parsed){
+        const v = parsed[k];
+        if(Lessonsd+-sLessonsd+.test(k)){
+          data.groups[k] = { startDay Number(v), doneDates [] };
+        } else if(^d+$.test(k)){
+          const n = Number(k);
+          const g = n%2===1  n  n-1;
+          const name = `Lesson ${g}- Lesson ${g+1}`;
+          data.groups[name] = { startDay Number(v), doneDates [] };
+        }
+      }
+    }
+    save(); alert(导入成功);
+  } catch(e){ alert(导入失败：+e.message); }
+}
+
+function exportJSON(){
+  const blob = new Blob([JSON.stringify(data,null,2)],{typeapplicationjson});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement(a); a.href = url; a.download = nce_v7_colored.json; a.click(); URL.revokeObjectURL(url);
+}
+function resetAll(){
+  if(!confirm(确定清除全部记录？)) return;
+  data = { groups{}, restDays[], meta{ lastActivenull, streak0 } };
+  save();
+}
+function import72(){
+  for(let i=0;i36;i++){ const n = i2+1; data.groups[`Lesson ${n}- Lesson ${n+1}`] = { startDay1, doneDates[] }; }
+  save();
+}
+
+ stats 
+function renderStats(){
+  const groups = Object.keys(data.groups);
+  const total = groups.length;
+  let done = 0;
+  groups.forEach(g= done += (data.groups[g].doneDates  []).length );
+  const rate = total  Math.round((done(totalOFFSETS.length))100)  0;
+  $(statTotal).innerText = total;
+  $(statDone).innerText = done;
+  $(statRate).innerText = rate + %;
+  $(statStreak).innerText = data.meta.streak  0;
+  $(progressInner).style.width = rate + %;
+}
+
+ events binding 
+$(addBtn).onclick = addLearning;
+$(doImport).onclick = importJSON;
+$(doExport).onclick = exportJSON;
+$(resetBtn).onclick = resetAll;
+$(addRestBtn).onclick = addRest;
+$(clearRestBtn).onclick = clearRest;
+$(auto72).onclick = import72;
+$(exportBtn).onclick = exportJSON;
+$(exportFile).onclick = exportJSON;
+$(exportWeekPng).onclick = exportWeekPNG;
+$(importBtn).onclick = ()={
+  const t = prompt(贴入 JSON：);
+  if(t){ $(importArea).value = t; importJSON(); }
+};
+$(toggleView).onclick = ()={
+  const w = $(weekView);
+  if(getComputedStyle(w).display === none  !w.style.display){
+    w.style.display = block; $(calendarGrid).style.display = none;
+  } else {
+    w.style.display = none; $(calendarGrid).style.display = grid;
+  }
+};
+$(markAllTodayBtn).onclick = markAllToday;
+
+ periodic auto-snapshot every minute (keeps today's snapshot, avoids accidental rollbacks) 
+let currentSaveDateKey = (new Date()).toISOString().slice(0,10).replace(-g,'');
+setInterval(()={
+  const todayKey = (new Date()).toISOString().slice(0,10).replace(-g,'');
+  if(todayKey !== currentSaveDateKey){
+    save();
+    currentSaveDateKey = todayKey;
+    try{
+      const todayDailyKey = DAILY_PREFIX + todayKey;
+      if(!localStorage.getItem(todayDailyKey)){
+        localStorage.setItem(todayDailyKey, JSON.stringify(data));
+        let idx = JSON.parse(localStorage.getItem(DAILY_INDEX_KEY)  []);
+        if(!idx.includes(todayDailyKey)) idx.push(todayDailyKey);
+        if(idx.length  MAX_DAILY_SNAPSHOTS) idx = idx.slice(idx.length - MAX_DAILY_SNAPSHOTS);
+        localStorage.setItem(DAILY_INDEX_KEY, JSON.stringify(idx));
+      }
+    }catch(e){ console.warn(daily auto snapshot fail, e); }
+  } else {
+    try{ const todayDailyKey = DAILY_PREFIX + todayKey; localStorage.setItem(todayDailyKey, JSON.stringify(data)); } catch(e){}
+  }
+}, 60  1000);
+
+ resize re-render 
+window.addEventListener('resize', ()={ renderCalendarRange(); renderWeekView(); });
+
+ initial load 
+load();
+
+ expose for debug 
+window._NCE_V7 = { getData ()=data, setData (d)={ data=d; save(); }, backupLast ()=localStorage.getItem(LAST_BACKUP_KEY) };
+script
+body
+html
+```
