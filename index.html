@@ -186,7 +186,7 @@ body{font-family: "Segoe UI", Roboto, "Noto Sans SC", Arial; background:var(--bg
 const START_DATE = new Date(2025, 10, 7); 
 // 月份从 0 开始：10 = 11月
 
-const OFFSETS = [0,1,3,7,14,29];
+const OFFSETS = [0,1,3,7,14,29,90,180];
 const STORAGE_KEY = "NCE_V7_COLORED_RULES"; // <-- 保持不变
 
 /* 快照/增强持久化配置（方案 B）
@@ -879,3 +879,4 @@ window._NCE_V7 = { getData: ()=>data, setData: (d)=>{ data=d; save(); }, backupL
 </script>
 </body>
 </html>
+
